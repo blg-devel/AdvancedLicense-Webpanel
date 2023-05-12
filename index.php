@@ -22,7 +22,7 @@
 
   if(!isset($_GET['page'])) $_GET['page'] = '';
   if($_GET['page'] == 'logout'){
-    $link->query("DELETE FROM `auth_keys` WHERE `key` = '".$_COOKIE['auth_key']."'");
+    $link->query("DELETE FROM `auth_keys` WHERE `key` = '".$link->real_escape_string($_COOKIE['auth_key'])."'");
     setcookie("usr", "", time() - 3600);
     setcookie("auth_key", "", time() - 3600);
   }
@@ -48,8 +48,8 @@
         setcookie('auth_key', $cookie_value = generateRandomString(), time() + 14400, "/");
         $key = $cookie_value;
         $usr = md5($_POST['usr']);
-        $link->query("DELETE FROM `auth_keys` WHERE `user` = '".$_POST['usr']."'");
-        $link->query("INSERT INTO `auth_keys` (`user`,`key`) VALUES ('".$_POST['usr']."','".$cookie_value."')");
+        $link->query("DELETE FROM `auth_keys` WHERE `user` = '".$link->real_escape_string($_POST['usr'])."'");
+        $link->query("INSERT INTO `auth_keys` (`user`,`key`) VALUES ('".$link->real_escape_string($_POST['usr'])."','".$link->real_escape_string($cookie_value)."')");
       }else{
         $error = '<div class="al_alert">Username or password are incorrect</div>';
       }
@@ -70,7 +70,7 @@
   if(!isset($key) AND isset($_COOKIE['auth_key'])) $key = $_COOKIE['auth_key'];
   if(!isset($key)) $key = '';
   if(!isset($usr)) $usr = '';
-  $res = $link->query("SELECT * FROM `auth_keys` WHERE `key`='".$key."'");
+  $res = $link->query("SELECT * FROM `auth_keys` WHERE `key`='".$link->real_escape_string($key)."'");
   if($res->num_rows > 0) if(md5(mysqli_result($res, 0, 'user')) == $usr) $loggedIn = 1;
 
   $page = $_GET["page"];

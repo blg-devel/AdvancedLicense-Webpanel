@@ -13,9 +13,9 @@
   $rand = _xor($rand_EW_SKey, $sKey);
   $key = _xor($key_EW_rand, $rand);
 
-  $usrIP = getUserIP();
+  $usrIP = $link->real_escape_string(getUserIP());
 
-  $stingKey = fromBinary($key);
+  $stingKey = $link->real_escape_string(fromBinary($key));
 
   $passed = 0;
 
