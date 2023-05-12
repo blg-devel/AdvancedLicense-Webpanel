@@ -8,6 +8,10 @@
 </script>
 
 <?php
+
+
+#if(!isset($_GET["refresh"])) header("Refresh:0; url=?page=manage&refresh=no");
+
 function getLastRef($time="0") {
   foreach (explode("#", $time) as $str) {
     if($str > $time) $time = $str;
@@ -15,7 +19,7 @@ function getLastRef($time="0") {
   if(!$time) return "0";
   else return $time."000";
 }
- ?>
+?>
 
 <div class="manage">
   <script>
@@ -42,40 +46,40 @@ function getLastRef($time="0") {
     <tbody>
       <?php
         $sql= "SELECT * FROM `licenses`";
-        $result=mysql_query($sql,$link);
-        if(mysql_num_rows($result)>0) {
-        	for($i=0; $i<mysql_num_rows($result); $i++) {
+        $result=$link->query($sql);
+        if($result->num_rows > 0) {
+        	for($i=0; $i<$result->num_rows; $i++) {
             $cancelStlye='';
-            if(mysql_result($result,$i,'expiry') != -1 AND mysql_result($result,$i,'expiry') < time()*1000) $cancelStlye = "class='expired'";
+            if(mysqli_result($result,$i,'expiry') != -1 AND mysqli_result($result,$i,'expiry') < time()*1000) $cancelStlye = "class='expired'";
 
             echo "<tr style='cursor: pointer;' $cancelStlye onclick='$(\"#entry$i\").slideToggle();'>";
-            echo "<td class='header$i' > ".mysql_result($result,$i,'key')."</td>";
-            echo "<td class='header$i' > ".mysql_result($result,$i,'ips')."</td>";
+            echo "<td class='header$i' > ".mysqli_result($result,$i,'key')."</td>";
+            echo "<td class='header$i' > ".mysqli_result($result,$i,'ips')."</td>";
             echo "<td class='header$i'  id='date$i'></td>";
             echo "<td class='header$i'  id='date$i-2'></td>";
             echo "<td class='header$i'> <i class='fa fa-mouse-pointer'></i></td>";
-            echo "<script> document.getElementById('date$i').innerHTML = dateToString(".mysql_result($result,$i,'expiry').", 'Never'); </script>";
-            echo "<script> document.getElementById('date$i-2').innerHTML = dateToString(".getLastRef(mysql_result($result,$i,'lastRef')).", 'None yet'); </script>";
+            echo "<script> document.getElementById('date$i').innerHTML = dateToString(".mysqli_result($result,$i,'expiry').", 'Never'); </script>";
+            echo "<script> document.getElementById('date$i-2').innerHTML = dateToString(".getLastRef(mysqli_result($result,$i,'lastRef')).", 'None yet'); </script>";
             echo "</tr>";
             echo "<tr>";
             echo "<td colspan='5' id='entry$i' style='display: none;'>";
             ?>
             <div style="width: 40%; float: left;">
-              <h5><strong>Plugin-Name » </strong><?php echo mysql_result($result,$i,'plName'); ?></h5>
-              <h5><strong>Description » </strong><?php echo mysql_result($result,$i,'plDesc'); ?></h5>
-              <h5><strong>Client-Info » </strong><?php echo mysql_result($result,$i,'plClient'); ?></h5>
+              <h5><strong>Plugin-Name » </strong><?php echo mysqli_result($result,$i,'plName'); ?></h5>
+              <h5><strong>Description » </strong><?php echo mysqli_result($result,$i,'plDesc'); ?></h5>
+              <h5><strong>Client-Info » </strong><?php echo mysqli_result($result,$i,'plClient'); ?></h5>
             </div>
             <div style="width: 20%; float: left;">
               <h5><strong>« Last IPs »</strong></h5>
               <?php
-              $ips = explode('#', mysql_result($result,$i,'currIPs'));
+              $ips = explode('#', mysqli_result($result,$i,'currIPs'));
 
-              if(mysql_result($result,$i,'currIPs')) foreach ($ips as $value) { echo "<h5>- $value </h5>"; }
+              if(mysqli_result($result,$i,'currIPs')) foreach ($ips as $value) { echo "<h5>- $value </h5>"; }
               else echo "No IP yet!";
               ?>
             </div>
             <div style="width: 40%; float: left;">
-              <a href="#"><div onclick="deleteLic(<?php echo $i; ?>, <?php echo mysql_result($result,$i,'id'); ?>)" class='al_btn al_delete' style="float: right;">
+              <a href="#"><div onclick="deleteLic(<?php echo $i; ?>, <?php echo mysqli_result($result,$i,'id'); ?>)" class='al_btn al_delete' style="float: right;">
                 <div class='anim_btn al_delete'>
                    Delete
                 </div>

@@ -22,7 +22,7 @@
 
   if(!isset($_GET['page'])) $_GET['page'] = '';
   if($_GET['page'] == 'logout'){
-    mysql_unbuffered_query("DELETE FROM `auth_keys` WHERE `key` = '".$_COOKIE['auth_key']."'", $link);
+    $link->query("DELETE FROM `auth_keys` WHERE `key` = '".$_COOKIE['auth_key']."'");
     setcookie("usr", "", time() - 3600);
     setcookie("auth_key", "", time() - 3600);
   }
@@ -41,14 +41,15 @@
     if($_POST['usr'] == '' OR $_POST['pw'] == ''){
       $error = '<div class="al_alert">Please enter username and password</div>';
     }else{
-      $result = mysql_query("SELECT * FROM `users` WHERE `username` = '".$_POST['usr']."' AND `password` = '".$_POST['pw']."'", $link);
-      if(mysql_num_rows($result) > 0){
+      $result = $link->query("SELECT * FROM `users` WHERE `username` = '".$link->real_escape_string($_POST['usr'])."' AND `password` = '".$link->real_escape_string($_POST['pw'])."'");
+
+      if($result->num_rows > 0){
         setcookie('usr', md5($_POST['usr']), time() + 14400, "/");
         setcookie('auth_key', $cookie_value = generateRandomString(), time() + 14400, "/");
         $key = $cookie_value;
         $usr = md5($_POST['usr']);
-        mysql_unbuffered_query("DELETE FROM `auth_keys` WHERE `user` = '".$_POST['usr']."'", $link);
-        mysql_unbuffered_query("INSERT INTO `auth_keys` (`user`,`key`) VALUES ('".$_POST['usr']."','".$cookie_value."')", $link);
+        $link->query("DELETE FROM `auth_keys` WHERE `user` = '".$_POST['usr']."'");
+        $link->query("INSERT INTO `auth_keys` (`user`,`key`) VALUES ('".$_POST['usr']."','".$cookie_value."')");
       }else{
         $error = '<div class="al_alert">Username or password are incorrect</div>';
       }
@@ -69,8 +70,8 @@
   if(!isset($key) AND isset($_COOKIE['auth_key'])) $key = $_COOKIE['auth_key'];
   if(!isset($key)) $key = '';
   if(!isset($usr)) $usr = '';
-  $res = mysql_query("SELECT * FROM `auth_keys` WHERE `key`='".$key."'",$link);
-  if(mysql_num_rows($res) > 0) if(md5(mysql_result($res, 0, 'user')) == $usr) $loggedIn = 1;
+  $res = $link->query("SELECT * FROM `auth_keys` WHERE `key`='".$key."'");
+  if($res->num_rows > 0) if(md5(mysqli_result($res, 0, 'user')) == $usr) $loggedIn = 1;
 
   $page = $_GET["page"];
   if($page == '' OR $page == 'logout') $page = "dashboard";

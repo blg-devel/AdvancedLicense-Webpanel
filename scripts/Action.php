@@ -6,29 +6,31 @@ else exit("Could not find file 'scripts/connect.php'");
 
 $action = $_GET["action"];
 
-if($action == "create"){
-  try {
-    $key     = $_GET["key"];
-    $ips     = $_GET["ips"];
-    $expDate = $_GET["expDate"];
-      if($expDate == "null") $expDate = -1;
-    $dName   = $_GET["dName"];
-    $dDesc   = $_GET["dDesc"];
-    $dClient = $_GET["dClient"];
-    $dBound  = $_GET["dBound"];
-      if($dBound == "true") $dBound = 1;
-      else $dBound = 0;
+if(isset($_COOKIE['auth_key']) AND
+   $link->query("SELECT * FROM `auth_keys` WHERE `key`='".$link->real_escape_string($_COOKIE['auth_key'])."'")->num_rows > 0){
+  if($action == "create"){
+    try {
+      $key     = strip_tags($_GET["key"]);
+      $ips     = strip_tags($_GET["ips"]);
+      $expDate = strip_tags($_GET["expDate"]);
+        if($expDate == "null") $expDate = -1;
+      $dName   = strip_tags($_GET["dName"]);
+      $dDesc   = strip_tags($_GET["dDesc"]);
+      $dClient = strip_tags($_GET["dClient"]);
+      $dBound  = strip_tags($_GET["dBound"]);
+        if($dBound == "true") $dBound = 1;
+        else $dBound = 0;
 
-    mysql_query("INSERT INTO `licenses` (`key`, `ips`, `expiry`, `plName`, `plDesc`, `plClient`, `plBound`) VALUES
-             ('$key', '$ips', '$expDate', '$dName', '$dDesc', '$dClient', '$dBound')", $link);
-    echo "SUCCESS!";
-  }catch(Exception $e) {
-  echo 'FAILED! Error:' .$e->getMessage();
+      $link->query("INSERT INTO `licenses` (`key`, `ips`, `expiry`, `plName`, `plDesc`, `plClient`, `plBound`) VALUES
+               ('$key', '$ips', '$expDate', '$dName', '$dDesc', '$dClient', '$dBound')");
+      echo "SUCCESS!";
+    }catch(Exception $e) {
+    echo 'FAILED! Error:' .$e->getMessage();
+    }
   }
-}
 
-if($action == "delete"){
-  mysql_query("DELETE FROM `licenses` WHERE `id`='".$_GET["id"]."'", $link);
-}
-
+  if($action == "delete"){
+    $link->query("DELETE FROM `licenses` WHERE `id`='".$_GET["id"]."'");
+  }
+}else echo "FAILED! You are not logged in";
 ?>

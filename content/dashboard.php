@@ -24,7 +24,7 @@ if(STATS){
     $data = explode("#", fgets($logFile));
     for ($i=0; $i < 12; $i++) {
       if(isset($data[1]) AND $data[1] > $myTime-(60*15*($i+1))){
-        if(isset($statsData[$data[0]][$i])) $statsData[$data[0]][$i] = $statsData[$data[0]][$i]+1;
+        $statsData[$data[0]][$i] = (isset($statsData[$data[0]][$i]) ? $statsData[$data[0]][$i] : 0) +1;
         break;
       }
     }
@@ -51,7 +51,7 @@ if(STATS){
 <p>
   We from the Skamps-Team have coded this advanced License-System and the Webpanel with a pation to high usability and a user friendly interface. <br/>
   If you feel like some feature is missing or you just want to talk to us feel free to contact us.<br/>
-  Please make sure that you rate this resource 5/5 Stats on <a href="#" style="color:#006ee0;">Spigot</a> if you like our work.<br/>
+  Please make sure that you rate this resource 5/5 Stats on <a href="https://www.spigotmc.org/resources/advancedlicense.20823/" style="color:#006ee0;">Spigot</a> if you like our work.<br/>
   We hope you like AdvancedLicense <3 <br/>
   <br/>
   With kind regards <br/>

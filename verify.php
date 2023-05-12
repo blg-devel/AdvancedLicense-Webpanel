@@ -19,14 +19,14 @@
 
   $passed = 0;
 
-  $res = mysql_query("SELECT * FROM `licenses` WHERE `key`='".$stingKey."'",$link);
-  if(mysql_num_rows($res) > 0){
-    if(mysql_result($res, 0, 'expiry') < time()){
-      if(mysql_result($res, 0, 'plBound') == 0 OR mysql_result($res, 0, 'plName') == $pluginName){
+  $res = $link->query("SELECT * FROM `licenses` WHERE `key`='".$stingKey."'");
+  if($res->num_rows > 0){
+    if(mysqli_result($res, 0, 'expiry') > time()){
+      if(time() < mysqli_result($res, 0, 'expiry') or mysqli_result($res, 0, 'expiry') == -1){
       #echo "Key found!";
-      $currIPs = mysql_result($res, 0, 'currIPs');
-      $lastRef = mysql_result($res, 0, 'lastRef');
-      $ips = mysql_result($res, 0, 'ips');
+      $currIPs = mysqli_result($res, 0, 'currIPs');
+      $lastRef = mysqli_result($res, 0, 'lastRef');
+      $ips = mysqli_result($res, 0, 'ips');
 
       $arrIPs = array();
       $arrRef = array();
@@ -72,11 +72,10 @@
 
       #echo "<br/> Passed = ".$passed;
 
-      mysql_query("UPDATE `licenses`
+      $link->query("UPDATE `licenses`
                    SET `currIPs` = '".implode("#", $arrIPs)."',
                        `lastRef` = '".implode("#", $arrRef)."'
-                   WHERE `key`='".$stingKey."'"
-      ,$link);
+                   WHERE `key`='".$stingKey."'");
 
       if($passed) echo _xor($rand, _xor($key, $sKey));
       else echo "NOT_VALID_IP";
