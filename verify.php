@@ -21,8 +21,8 @@
 
   $res = $link->query("SELECT * FROM `licenses` WHERE `key`='".$stingKey."'");
   if($res->num_rows > 0){
-    if(mysqli_result($res, 0, 'expiry') > time()){
-      if(time() < mysqli_result($res, 0, 'expiry') or mysqli_result($res, 0, 'expiry') == -1){
+    if(time() < mysqli_result($res, 0, 'expiry') or mysqli_result($res, 0, 'expiry') == -1){
+      if(mysqli_result($res, 0, 'plBound') == 0 OR mysqli_result($res, 0, 'plName') == $pluginName){
       #echo "Key found!";
       $currIPs = mysqli_result($res, 0, 'currIPs');
       $lastRef = mysqli_result($res, 0, 'lastRef');

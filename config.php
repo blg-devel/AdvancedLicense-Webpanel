@@ -19,7 +19,7 @@
 	define("HOST", "localhost");
 
 	//MySQL-Account
-  define("USERNAME", "YOUR-USERNME");
+  define("USERNAME", "YOUR-USERNAME");
 	define("PASSWORD", "YOUR-PASSWORD");
 
 //                                            //
