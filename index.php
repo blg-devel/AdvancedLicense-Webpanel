@@ -1,8 +1,13 @@
 <?php
-  error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
-  require 'config.php';
   require "scripts/connect.php";
+
+  if(HTTPS){
+    echo " <script>
+    if (window.location.protocol != 'https:')
+      window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+    </script> ";
+  }
 
   if (NOINDEX) {
   	$meta = "noindex, ";
@@ -15,6 +20,7 @@
   	$meta .= "follow";
   }
 
+  if(!isset($_GET['page'])) $_GET['page'] = '';
   if($_GET['page'] == 'logout'){
     mysql_unbuffered_query("DELETE FROM `auth_keys` WHERE `key` = '".$_COOKIE['auth_key']."'", $link);
     setcookie("usr", "", time() - 3600);
@@ -31,7 +37,7 @@
     return $randomString;
   }
 
-  if($_POST['login'] == 1){
+  if(isset($_POST['login']) AND $_POST['login'] == 1){
     if($_POST['usr'] == '' OR $_POST['pw'] == ''){
       $error = '<div class="al_alert">Please enter username and password</div>';
     }else{
@@ -59,8 +65,8 @@
   }
 
   $loggedIn = 0;
-  if($usr == '') $usr = $_COOKIE['usr'];
-  if($key == '') $key = $_COOKIE['auth_key'];
+  if(!isset($usr)) $usr = $_COOKIE['usr'];
+  if(!isset($key)) $key = $_COOKIE['auth_key'];
   $res = mysql_query("SELECT * FROM `auth_keys` WHERE `key`='".$key."'",$link);
   if(mysql_num_rows($res) > 0) if(md5(mysql_result($res, 0, 'user')) == $usr) $loggedIn = 1;
 

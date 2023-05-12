@@ -23,22 +23,25 @@ if(STATS){
   while(!feof($logFile)) {
     $data = explode("#", fgets($logFile));
     for ($i=0; $i < 12; $i++) {
-      if($data[1] > $myTime-(60*15*($i+1))){
-        $statsData[$data[0]][$i] = $statsData[$data[0]][$i]+1;
+      if(isset($data[1]) AND $data[1] > $myTime-(60*15*($i+1))){
+        if(isset($statsData[$data[0]][$i])) $statsData[$data[0]][$i] = $statsData[$data[0]][$i]+1;
         break;
       }
     }
   }
 
+  $statsStringVerif = "";
+  $statsStringFailed = "";
+
   for ($i=12; $i >= 0; $i--) {
-    $statsStringVerif .= ($statsData[1][$i] == '' ? '0' : $statsData[1][$i]).", ";
-    $statsStringFailed .= ($statsData[0][$i] == '' ? '0' : $statsData[0][$i]).", ";
+    $statsStringVerif .= (!isset($statsData[1][$i]) ? '0' : $statsData[1][$i]).", ";
+    $statsStringFailed .= (!isset($statsData[0][$i]) ? '0' : $statsData[0][$i]).", ";
   }
 
 
 
-    $statsStringVerif = substr($statsStringVerif, 0, -2);
-    $statsStringFailed = substr($statsStringFailed, 0, -2);
+    if(isset($statsStringVerif))  $statsStringVerif = substr($statsStringVerif, 0, -2);
+    if(isset($statsStringFailed)) $statsStringFailed = substr($statsStringFailed, 0, -2);
   fclose($logFile);
 }
 ?>

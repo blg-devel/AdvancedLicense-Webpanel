@@ -35,6 +35,9 @@
   // If you change this key you will also
   // need to change it in the java component
   // by .setSecurityKey('Your-Key');
+  
+  // If enabled this will automatically redirect to https
+  define("HTTPS", false);
 
 //                                            //
 ////////////////////////////////////////////////
@@ -45,7 +48,7 @@
 	// Whether license-requests will be logged
 	// and displayed in the dashboard
 	define("STATS", true);
-  // You can disable this to avoid error-messages
+	// You can disable this to avoid error-messages
 	// if PHP does not has enought permissions
 	// or to boost the performance [just a few milliseconds]
 

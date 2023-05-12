@@ -1,5 +1,9 @@
 <?php
 
+if(file_exists('../config.php')) require '../config.php';
+elseif (file_exists('config.php')) require 'config.php';
+else breakDown("Could not find file 'config.php'");
+
 function breakDown($msg, $alert='0'){
   echo "<head>";
   echo "<link rel='stylesheet' href='css/master.css' type='text/css' charset='utf-8'>";
@@ -9,10 +13,6 @@ function breakDown($msg, $alert='0'){
   if($alert) $allCalss = "al_alert";
   exit("<div class='$allCalss'>$msg</div> ");
 }
-
-if(file_exists('../config.php')) require '../config.php';
-elseif (file_exists('config.php')) require 'config.php';
-else breakDown("Could not find file 'config.php'");
 
 if(!($link = mysql_connect(HOST, USERNAME, PASSWORD))){
   breakDown("Failed connection to MySQL-Server please make sure that you've entered all

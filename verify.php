@@ -1,12 +1,12 @@
 <?php
   error_reporting(E_ERROR | E_WARNING | E_PARSE);
-
+  if(!isset($_GET["v1"]) OR !isset($_GET["v2"])) exit("URL_ERROR");
   require "scripts/connect.php";
   $rand_EW_SKey = $_GET["v1"];
   $key_EW_rand = $_GET["v2"];
 
-  $pluginName = $_GET["pl"];
-  if(!$pluginName) $pluginName = "UnValidPluginName!";
+  if(isset($_GET["pl"]))$pluginName = $_GET["pl"];
+  else $pluginName = "UnValidPluginName!";
 
   $sKey = toBinary(CKAP_KEY);
 
@@ -129,6 +129,7 @@
 
   function toBinary($value='none'){
     $str = "";
+    $a = 0;
     while ($a < strlen($value)) {
       $str .= sprintf( "%08d", decbin(ord(substr($value, $a, 1))));
       $a++;
@@ -138,6 +139,7 @@
 
   function fromBinary($value='00100001'){
     $str = "";
+    $a = 0;
     while ($a < strlen($value)) {
       $str .= chr(bindec(substr($value, $a, 8)));
       $a = $a+8;

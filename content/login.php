@@ -1,5 +1,5 @@
 <div class="login">
-  <?php echo $error; ?>
+  <?php if(isset($error)) echo $error; ?>
 
   <div class="al_load">
     <i class="fa fa-user userlog"></i>
