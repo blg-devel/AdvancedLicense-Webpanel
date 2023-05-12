@@ -65,8 +65,10 @@
   }
 
   $loggedIn = 0;
-  if(!isset($usr)) $usr = $_COOKIE['usr'];
-  if(!isset($key)) $key = $_COOKIE['auth_key'];
+  if(!isset($usr) AND isset($_COOKIE['usr'])) $usr = $_COOKIE['usr'];
+  if(!isset($key) AND isset($_COOKIE['auth_key'])) $key = $_COOKIE['auth_key'];
+  if(!isset($key)) $key = '';
+  if(!isset($usr)) $usr = '';
   $res = mysql_query("SELECT * FROM `auth_keys` WHERE `key`='".$key."'",$link);
   if(mysql_num_rows($res) > 0) if(md5(mysql_result($res, 0, 'user')) == $usr) $loggedIn = 1;
 
