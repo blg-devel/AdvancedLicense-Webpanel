@@ -57,9 +57,15 @@ class ClientCom
 
     private function _xor($text, $key)
     {
-        for ($i = 0; $i < strlen($text); $i++) {
+        $textLength = strlen($text);
+        $keyLength = strlen($key);
+
+        $length = min($textLength, $keyLength);
+
+        for ($i = 0; $i < $length; $i++) {
             $text[$i] = intval($text[$i]) ^ intval($key[$i]);
         }
+
         return $text;
     }
 }
