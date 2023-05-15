@@ -37,12 +37,12 @@ addRequestToStats($passed);
 
 <?php
 
-function addRequestToStats($value = '1')
+function addRequestToStats($value = true)
 {
     if (STATS) {
         $logFile = fopen("log.txt", "a+");
         if (!$logFile) return;
-        fwrite($logFile, $value . '#' . time() . "\n");
+        fwrite($logFile, intval($value) . '#' . time() . "\n");
         fclose($logFile);
     }
 }
