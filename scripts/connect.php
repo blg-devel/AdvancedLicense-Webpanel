@@ -29,8 +29,8 @@ if ($link->connect_error) {
     breakDown("Failed connection to MySQL-Server please make sure that you've entered all
         MySQL-Data correctly into the config.php and that the MySQL-Server is running!", 1);
 } else {
-    if (!$link->query("DESCRIBE `licenses`")) {
-        $link->query("CREATE TABLE `licenses` (
+
+    $link->query("CREATE TABLE IF NOT EXISTS `licenses` (
       `id` INT AUTO_INCREMENT,
       `key` TEXT NULL,
       `ips` INT NULL DEFAULT '1',
@@ -45,11 +45,8 @@ if ($link->connect_error) {
       ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8");
 
-        breakDown("The table 'licenses' got createt successfully! Please refresh the page | Step [1/4]");
-    }
 
-    if (!$link->query("DESCRIBE `auth_keys`")) {
-        $link->query("CREATE TABLE `auth_keys` (
+    $link->query("CREATE TABLE IF NOT EXISTS `auth_keys` (
       `id` INT AUTO_INCREMENT,
       `user` TEXT NULL,
       `key` TEXT NULL,
@@ -57,18 +54,12 @@ if ($link->connect_error) {
       ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8");
 
-        breakDown("The table 'auth_keys' got createt successfully! Please refresh the page | Step [2/4]");
-    }
 
-    if (!$link->query("DESCRIBE `users`")) {
-        $link->query("CREATE TABLE `users` (
+    $link->query("CREATE TABLE IF NOT EXISTS `users` (
       `username` TEXT NULL,
       `password` TEXT NULL )
       ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8"); //TODO primary key username
-
-        breakDown("The table 'users' got createt successfully! Please refresh the page | Step [3/4]");
-    }
 
     if (!ADMIN_USERNAME or !ADMIN_PASSWORD) {
         breakDown("You have to enter the data for the Admin-Account in the config.php", 1);
