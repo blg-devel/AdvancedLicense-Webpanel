@@ -49,7 +49,7 @@ define("HTTPS", false);
 // and displayed in the dashboard
 define("STATS", true);
 // You can disable this to avoid error-messages
-// if PHP does not has enought permissions
+// if PHP does not have enough permissions
 // or to boost the performance [just a few milliseconds]
 
 //                                            //
@@ -61,8 +61,6 @@ define("STATS", true);
 // You will need this data to login
 define("ADMIN_USERNAME", "");
 define("ADMIN_PASSWORD", "");
-// To add more accs insert them into
-// the 'users' table on the MySQL-Server
 
 //                                            //
 ////////////////////////////////////////////////

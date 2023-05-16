@@ -4,6 +4,8 @@ if (file_exists('../config.php')) require '../config.php';
 elseif (file_exists('config.php')) require 'config.php';
 else breakDown("Could not find file 'config.php'");
 
+require_once "util/UserManager.php";
+
 function mysqli_result($res, $row, $field = 0)
 {
     $res->data_seek($row);
@@ -55,7 +57,7 @@ if ($link->connect_error) {
       ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8");
 
-        breakDown("The table 'auth_keys' got createt successfully! Please refresh the page | Step [2/4]<");
+        breakDown("The table 'auth_keys' got createt successfully! Please refresh the page | Step [2/4]");
     }
 
     if (!$link->query("DESCRIBE `users`")) {
@@ -63,24 +65,23 @@ if ($link->connect_error) {
       `username` TEXT NULL,
       `password` TEXT NULL )
       ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8");
+    DEFAULT CHARACTER SET = utf8"); //TODO primary key username
 
         breakDown("The table 'users' got createt successfully! Please refresh the page | Step [3/4]");
     }
 
-    if (!ADMIN_USERNAME or !ADMIN_PASSWORD) breakDown("You have to enter the data for the Admin-Account in the config.php", 1);
-    else {
+    if (!ADMIN_USERNAME or !ADMIN_PASSWORD) {
+        breakDown("You have to enter the data for the Admin-Account in the config.php", 1);
+    } else {
         $result = $link->query("SELECT * FROM `users`");
-        if ($result->num_rows > 0) {
-            $link->query("UPDATE `users` SET
-          `username` = '" . ADMIN_USERNAME . "',
-          `password` = '" . ADMIN_PASSWORD . "'
-        WHERE
-          `username` = '" . mysqli_result($result, 0, 'username') . "' AND
-          `password` = '" . mysqli_result($result, 0, 'password') . "' ");
+        if ($result->num_rows <= 0) {
+            addUser(ADMIN_USERNAME, ADMIN_PASSWORD);
         } else {
-            $link->query("INSERT INTO `users` (`username`, `password`) VALUES ('" . ADMIN_USERNAME . "','" . ADMIN_PASSWORD . "')");
+            if (!userExists(ADMIN_USERNAME)) {
+                addUser(ADMIN_USERNAME, ADMIN_PASSWORD);
+            } else if (!validateUser(ADMIN_USERNAME, ADMIN_PASSWORD)) {
+                changePassword(ADMIN_USERNAME, ADMIN_PASSWORD);
+            }
         }
     }
 }
-?>

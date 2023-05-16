@@ -1,6 +1,7 @@
 <?php
 
 require "scripts/connect.php";
+require_once "util/UserManager.php";
 
 if (HTTPS) {
     echo " <script>
@@ -39,12 +40,13 @@ function generateRandomString($length = 10)
 }
 
 if (isset($_POST['login']) and $_POST['login'] == 1) {
-    if ($_POST['usr'] == '' or $_POST['pw'] == '') {
+    $username = $_POST['usr'];
+    $password = $_POST['pw'];
+
+    if ($username == '' or $password == '') {
         $error = '<div class="al_alert">Please enter username and password</div>';
     } else {
-        $result = $link->query("SELECT * FROM `users` WHERE `username` = '" . $link->real_escape_string($_POST['usr']) . "' AND `password` = '" . $link->real_escape_string($_POST['pw']) . "'");
-
-        if ($result->num_rows > 0) {
+        if (validateUser($username, $password)) {
             setcookie('usr', md5($_POST['usr']), time() + 14400, "/");
             setcookie('auth_key', $cookie_value = generateRandomString(), time() + 14400, "/");
             $key = $cookie_value;
