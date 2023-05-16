@@ -54,9 +54,10 @@ if ($link->connect_error) {
 
     $link->query("CREATE TABLE IF NOT EXISTS `users` (
       `username` TEXT NULL,
-      `password` TEXT NULL )
+      `password` TEXT NULL,
+       UNIQUE INDEX `idx_username_unique` (`username`))
       ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8"); //TODO primary key username
+    DEFAULT CHARACTER SET = utf8");
 
     if (!ADMIN_USERNAME or !ADMIN_PASSWORD) {
         breakDown("You have to enter the data for the Admin-Account in the config.php", 1);
