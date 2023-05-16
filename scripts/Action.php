@@ -1,8 +1,6 @@
 <?php
 
-if (file_exists('connect.php')) require 'connect.php';
-elseif (file_exists('scripts/connect.php')) require 'scripts/connect.php';
-else exit("Could not find file 'scripts/connect.php'");
+require __DIR__ . "/connect.php";
 
 $action = $_GET["action"];
 

@@ -1,10 +1,7 @@
 <?php
 
-if (file_exists('../config.php')) require '../config.php';
-elseif (file_exists('config.php')) require 'config.php';
-else breakDown("Could not find file 'config.php'");
-
-require_once "util/UserManager.php";
+require __DIR__ . "/../config.php";
+require_once __DIR__ . "/../util/UserManager.php";
 
 function mysqli_result($res, $row, $field = 0)
 {
