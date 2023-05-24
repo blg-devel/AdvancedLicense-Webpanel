@@ -1,7 +1,8 @@
 <?php
 
-require "scripts/connect.php";
-require_once "util/UserManager.php";
+require_once __DIR__ . "/scripts/connect.php";
+require_once __DIR__ . "/util/UserManager.php";
+require_once __DIR__ . "/util/RandomUtil.php";
 
 if (HTTPS) {
     echo " <script>
@@ -26,17 +27,6 @@ if ($_GET['page'] == 'logout') {
     $link->query("DELETE FROM `auth_keys` WHERE `key` = '" . $link->real_escape_string($_COOKIE['auth_key']) . "'");
     setcookie("usr", "", time() - 3600);
     setcookie("auth_key", "", time() - 3600);
-}
-
-function generateRandomString($length = 10)
-{
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
 }
 
 if (isset($_POST['login']) and $_POST['login'] == 1) {

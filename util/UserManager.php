@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . "/../scripts/connect.php";
+
 const PASSWORD_HASH_ALGO = PASSWORD_DEFAULT; //TODO save algorithm
 
 function addUser($name, $password)

@@ -28,10 +28,12 @@ define("PASSWORD", "YOUR-PASSWORD");
 ////////////////////////////////////////////////
 //             Security                       //
 //                                     	      //
-// This key will be used for the
+// This keys will be used for the
 // cryptographic-key-authentication-protection
-// Required lenght: 36 [only 1 & 0]
+// Required length: 36 [only 1 & 0]
 define("CKAP_KEY", "YecoF0I6M05thxLeokoHuW8iUhTdIUInjkfF");
+// Public key for user-validation:
+define("CKAP_KEY_CLIENT", "rHnVh9RsoYLmU6P5SrvaBT43d5z9vPiLzFLc");
 // If you change this key you will also
 // need to change it in the java component
 // by .setSecurityKey('Your-Key');

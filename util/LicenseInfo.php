@@ -1,5 +1,5 @@
 <?php
-require "scripts/connect.php";
+require_once __DIR__ . "/../scripts/connect.php";
 
 function getLicenseInfo($key)
 {

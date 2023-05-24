@@ -42,6 +42,14 @@ if ($link->connect_error) {
       ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8");
 
+    $link->query("CREATE TABLE IF NOT EXISTS `user_tokens` (
+      `token` TEXT NULL,
+      `ip` TEXT NULL,
+      `license` TEXT NULL,
+      `expiry` BIGINT NULL,
+       UNIQUE INDEX `idx_token_unique` (`token`))
+      ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8");
 
     $link->query("CREATE TABLE IF NOT EXISTS `auth_keys` (
       `id` INT AUTO_INCREMENT,

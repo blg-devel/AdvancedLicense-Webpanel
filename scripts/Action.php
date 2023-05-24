@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . "/connect.php";
+require_once __DIR__ . "/connect.php";
 
 $action = $_GET["action"];
 
@@ -31,4 +31,3 @@ if (isset($_COOKIE['auth_key']) and
         $link->query("DELETE FROM `licenses` WHERE `id`='" . $link->real_escape_string($_GET["id"]) . "'");
     }
 } else echo "FAILED! You are not logged in";
-?>
