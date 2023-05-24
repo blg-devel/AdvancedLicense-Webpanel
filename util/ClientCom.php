@@ -12,14 +12,14 @@ class ClientCom
     }
 
 
-    function decrypt($encrypted)
+    function decrypt($encryptedBin)
     {
-        return $this->fromBinary($this->decryptToBin($encrypted));
+        return $this->fromBinary($this->decryptToBin($encryptedBin));
     }
 
-    function decryptToBin($encrypted)
+    function decryptToBin($encryptedBin)
     {
-        return $this->_xor($encrypted, $this->rand);
+        return $this->_xor($encryptedBin, $this->rand);
     }
 
 
