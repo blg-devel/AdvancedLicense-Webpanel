@@ -47,6 +47,7 @@ function getLastRef($time = "0")
         </thead>
         <tbody>
         <?php
+        global $link;
         $sql = "SELECT * FROM `licenses`";
         $result = $link->query($sql);
         if ($result->num_rows > 0) {

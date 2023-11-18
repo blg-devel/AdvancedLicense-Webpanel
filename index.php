@@ -1,5 +1,6 @@
 <?php
 
+global $link;
 require_once __DIR__ . "/scripts/connect.php";
 require_once __DIR__ . "/util/UserManager.php";
 require_once __DIR__ . "/util/RandomUtil.php";
@@ -24,7 +25,9 @@ if (NOFOLLOW) {
 
 if (!isset($_GET['page'])) $_GET['page'] = '';
 if ($_GET['page'] == 'logout') {
-    $link->query("DELETE FROM `auth_keys` WHERE `key` = '" . $link->real_escape_string($_COOKIE['auth_key']) . "'");
+    $delete_auth_key_stmt = $link->prepare("DELETE FROM `auth_keys` WHERE `key` = ?");
+    $delete_auth_key_stmt->bind_param("s", $_COOKIE['auth_key']);
+    $delete_auth_key_stmt->execute();
     setcookie("usr", "", time() - 3600);
     setcookie("auth_key", "", time() - 3600);
 }
@@ -41,8 +44,14 @@ if (isset($_POST['login']) and $_POST['login'] == 1) {
             setcookie('auth_key', $cookie_value = generateRandomString(), time() + 14400, "/");
             $key = $cookie_value;
             $usr = md5($_POST['usr']);
-            $link->query("DELETE FROM `auth_keys` WHERE `user` = '" . $link->real_escape_string($_POST['usr']) . "'");
-            $link->query("INSERT INTO `auth_keys` (`user`,`key`) VALUES ('" . $link->real_escape_string($_POST['usr']) . "','" . $link->real_escape_string($cookie_value) . "')");
+
+            $del_usr_stmt = $link->prepare("DELETE FROM `auth_keys` WHERE `user` = ?");
+            $del_usr_stmt->bind_param("s", $_POST['usr']);
+            $del_usr_stmt->execute();
+
+            $add_auth_key_stmt = $link->prepare("INSERT INTO `auth_keys` (`user`,`key`) VALUES (?, ?)");
+            $add_auth_key_stmt->bind_param("ss", $_POST['usr'], $cookie_value);
+            $add_auth_key_stmt->execute();
         } else {
             $error = '<div class="al_alert">Username or password are incorrect</div>';
         }
@@ -64,7 +73,12 @@ if (!isset($usr) and isset($_COOKIE['usr'])) $usr = $_COOKIE['usr'];
 if (!isset($key) and isset($_COOKIE['auth_key'])) $key = $_COOKIE['auth_key'];
 if (!isset($key)) $key = '';
 if (!isset($usr)) $usr = '';
-$res = $link->query("SELECT * FROM `auth_keys` WHERE `key`='" . $link->real_escape_string($key) . "'");
+
+$select_auth_key_stmt = $link->prepare("SELECT * FROM `auth_keys` WHERE `key`= ?");
+$select_auth_key_stmt->bind_param("s", $key);
+$select_auth_key_stmt->execute();
+$res = $select_auth_key_stmt->get_result();
+
 if ($res->num_rows > 0) if (md5(mysqli_result($res, 0, 'user')) == $usr) $loggedIn = 1;
 
 $page = $_GET["page"];
