@@ -28,44 +28,34 @@ if ($link->connect_error) {
 } else {
 
     $link->query("CREATE TABLE IF NOT EXISTS `licenses` (
-      `id` INT AUTO_INCREMENT,
-      `key` TEXT NULL,
-      `ips` INT NULL DEFAULT '1',
+      `key` VARCHAR(255) NOT NULL,
+      `ips` INT DEFAULT '1',
       `expiry` BIGINT NULL,
-      `plBound` INT NULL DEFAULT 0,
-      `plName` TEXT NULL,
+      `plBound` INT DEFAULT 0,
+      `plName` VARCHAR(255) NULL,
       `plDesc` TEXT NULL,
-      `plClient` TEXT NULL,
+      `plClient` VARCHAR(255) NULL,
       `lastRef` TEXT NULL,
       `currIPs` TEXT NULL,
-      PRIMARY KEY (`id`))
-      ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8");
+      PRIMARY KEY (`key`))");
 
     $link->query("CREATE TABLE IF NOT EXISTS `user_tokens` (
-      `token` TEXT NULL,
-      `ip` TEXT NULL,
-      `license` TEXT NULL,
-      `expiry` BIGINT NULL,
-       UNIQUE INDEX `idx_token_unique` (`token`))
-      ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8");
+      `token` VARCHAR(31) NOT NULL,
+      `ip` VARCHAR(100) NOT NULL,
+      `license` VARCHAR(255) NOT NULL,
+      `expiry` BIGINT,
+       PRIMARY KEY (`token`))");
 
     $link->query("CREATE TABLE IF NOT EXISTS `auth_keys` (
-      `id` INT AUTO_INCREMENT,
-      `user` TEXT NULL,
-      `key` TEXT NULL,
-      PRIMARY KEY (`id`))
-      ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8");
+      `user` VARCHAR(255) NOT NULL,
+      `key` VARCHAR(10) NOT NULL,
+      PRIMARY KEY (`user`))");
 
 
     $link->query("CREATE TABLE IF NOT EXISTS `users` (
-      `username` TEXT NULL,
-      `password` TEXT NULL,
-       UNIQUE INDEX `idx_username_unique` (`username`))
-      ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8");
+      `username` VARCHAR(255) NOT NULL,
+      `password` VARCHAR(255) NOT NULL,
+       PRIMARY KEY (`username`))");
 
     if (!ADMIN_USERNAME or !ADMIN_PASSWORD) {
         breakDown("You have to enter the data for the Admin-Account in the config.php", 1);
