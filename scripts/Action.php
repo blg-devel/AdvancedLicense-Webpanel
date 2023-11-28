@@ -30,7 +30,7 @@ if ($key_present) {
 
             $stmt = $link->prepare("INSERT INTO `licenses` 
                 (`key`, `ips`, `expiry`, `plName`, `plDesc`, `plClient`, `plBound` ) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("siiisss", $key, $ips, $expDate, $dName, $dDesc, $dClient, $dBound);
+            $stmt->bind_param("siissss", $key, $ips, $expDate, $dName, $dDesc, $dClient, $dBound);
             $stmt->execute();
 
             echo "SUCCESS!";
