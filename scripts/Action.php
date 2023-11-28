@@ -40,8 +40,8 @@ if ($key_present) {
     }
 
     if ($action == "delete") {
-        $stmt = $link->prepare("DELETE FROM `licenses` WHERE `id`= ?");
-        $stmt->bind_param("s", $_GET["id"]);
+        $stmt = $link->prepare("DELETE FROM `licenses` WHERE `key`= ?");
+        $stmt->bind_param("s", $_GET["key"]);
         $stmt->execute();
     }
 } else echo "FAILED! You are not logged in";

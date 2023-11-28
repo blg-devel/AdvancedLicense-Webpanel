@@ -25,10 +25,10 @@ function getLastRef($time = "0")
 
 <div class="manage">
     <script>
-        function deleteLic(elementID, id) {
-            console.log("Deleting license with id " + id + " -/- " + elementID);
+        function deleteLic(elementID, key) {
+            console.log("Deleting license " + key + " -/- " + elementID);
             var xhttp = new XMLHttpRequest();
-            xhttp.open("GET", "scripts/Action.php?action=delete&id=" + id, true);
+            xhttp.open("GET", "scripts/Action.php?action=delete&key=" + key, true);
             xhttp.send();
             $(".header" + elementID).slideUp();
             $("#entry" + elementID).slideUp();
@@ -87,7 +87,7 @@ function getLastRef($time = "0")
         </div>
         <div style="width: 40%; float: left;">
             <a href="#">
-                <div onclick="deleteLic(<?php echo $i; ?>, <?php echo mysqli_result($result, $i, 'id'); ?>)"
+                <div onclick="deleteLic(<?php echo $i; ?>, '<?php echo mysqli_result($result, $i, 'key'); ?>')"
                      class='al_btn al_delete' style="float: right;">
                     <div class='anim_btn al_delete'>
                          Delete
